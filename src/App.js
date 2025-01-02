@@ -271,9 +271,9 @@ import { io } from "socket.io-client";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { QRCodeCanvas } from "qrcode.react"; // Correct import
 
-// const socket = io("http://localhost:5000");
+const socket = io("http://localhost:5000");
 
-const socket = io("https://test-scanqrcode.onrender.com:10000");
+// const socket = io("https://test-scanqrcode.onrender.com:10000");
 
 
 
