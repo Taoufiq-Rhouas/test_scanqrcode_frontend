@@ -273,7 +273,7 @@ import { QRCodeCanvas } from "qrcode.react"; // Correct import
 
 // const socket = io("http://localhost:5000");
 
-const socket = io("https://test-scanqrcode-backend.onrender.com/10000"); // Connect to deployed backend
+const socket = io("https://test-scanqrcode-backend.onrender.com:10000"); // Connect to deployed backend
 
 
 
