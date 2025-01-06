@@ -270,16 +270,10 @@ import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { QRCodeCanvas } from "qrcode.react"; // Correct import
+import axios from 'axios';
+
 
 // const socket = io("http://localhost:5000");
-
-// const socket = io("https://test-scanqrcode-backend.onrender.com:10000"); // Connect to deployed backend
-
-const socket = io("https://test-scanqrcode-backend.onrender.com"); // Connect to deployed backend
-
-
-
-
 
 function App() {
   const [orderDetails, setOrderDetails] = useState(null);
@@ -290,6 +284,13 @@ function App() {
     total: "",
   });
   const [generatedQR, setGeneratedQR] = useState("");
+
+  // S_Test_Comunication
+  const [nameTest, setNameTest] = useState('');
+  const [result, setResult] = useState('');
+  const apiUrl = 'https://test-scanqrcode-backend.onrender.com';
+
+  const socket = io("https://test-scanqrcode-backend.onrender.com");
 
   const handleStartScan = () => {
     setScanning(true);
@@ -314,8 +315,75 @@ function App() {
     }));
   };
 
+
+
+  const handleChangeNameTest = (e) => {
+    setNameTest(e.target.value);
+  };
+
+  // const apiUrl = 'http://localhost:5000/api';
+  
+  const handleTestConnectionBackend = async () => {
+    try {
+      // Make an API call to the backend
+      // const response = await axios.post('https://test-scanqrcode-backend.onrender.com/api/test', { name: nameTest });
+      // const response = await axios.post('http://localhost:5000/api/test', { name: nameTest });
+      // const response = await axios.post('https://test-scanqrcode-backend.onrender.com/api/test', { name: nameTest });
+      const response = await axios.post(`${apiUrl}/api/test`, { name: nameTest });
+
+      
+      setResult(response.data.message); // Assuming the backend sends { message: "Welcome..." }
+    } catch (error) {
+      console.error('Error connecting to backend:', error);
+      setResult('Failed to connect to backend');
+    }
+  };
+
   return (
     <div className="App">
+      <hr/>
+      {/* <h1>Testing Back End Is Starting</h1>
+      <form>
+        <div className="mb-3">
+          <label htmlFor="Name" className="form-label">Name</label>
+          <input type="text" className="form-control" id="Name" value={nameTest} onChange={handleChangeNameTest} />
+        </div>
+        <button type="button" onClick={handleTestConectionBackend()} className="btn btn-primary">Submit</button>
+      </form>
+      <h2> Local value Name : {nameTest}</h2>
+      <h1>----</h1>
+      <h1>Result Connection : </h1> */}
+
+      <div>
+        <hr />
+        <h1>Testing Back End Is Starting</h1>
+        <form>
+          <div className="mb-3">
+            <label htmlFor="Name" className="form-label">Name</label>
+            <input 
+              type="text" 
+              className="form-control" 
+              id="Name" 
+              value={nameTest} 
+              onChange={handleChangeNameTest} 
+            />
+          </div>
+          <button 
+            type="button" 
+            onClick={handleTestConnectionBackend} 
+            className="btn btn-primary"
+          >
+            Submit
+          </button>
+        </form>
+        <h2>Local Value Name: {nameTest}</h2>
+        <h1>----</h1>
+        <h1>Result Connection:</h1>
+        <h3>{result}</h3>
+        <hr />
+      </div>
+      <hr/>
+
       <h1>Cashier Web App</h1>
 
       <div>
