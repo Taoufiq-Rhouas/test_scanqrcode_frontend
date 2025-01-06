@@ -292,6 +292,28 @@ function App() {
 
   const socket = io("https://test-scanqrcode-backend.onrender.com");
 
+  // S_UPDATE_V2
+  useEffect(() => {
+    // Listen for the 'order-details' event from the server
+    socket.on("order-details", (data) => {
+      console.log("Received order details:", data);
+      setOrderDetails(data); // Update state with received data
+    });
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      socket.off("order-details");
+    };
+  }, []);
+  // E_UPDATE_V2
+
+
+
+
+
+
+  
+
   const handleStartScan = () => {
     setScanning(true);
     const scanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 });
@@ -355,40 +377,164 @@ function App() {
       <h1>Result Connection : </h1> */}
 
       <div>
-        <hr />
-        <h1>Testing Back End Is Starting</h1>
-        <form>
-          <div className="mb-3">
-            <label htmlFor="Name" className="form-label">Name</label>
-            <input 
-              type="text" 
-              className="form-control" 
-              id="Name" 
-              value={nameTest} 
-              onChange={handleChangeNameTest} 
-            />
-          </div>
-          <button 
-            type="button" 
-            onClick={handleTestConnectionBackend} 
-            className="btn btn-primary"
-          >
-            Submit
-          </button>
-        </form>
-        <h2>Local Value Name: {nameTest}</h2>
-        <h1>----</h1>
-        <h1>Result Connection:</h1>
-        <h3>{result}</h3>
-        <hr />
+        <center><h1>Test Live Scan Fro Taoufiq</h1></center>
+      </div>
+      <hr />
+      <div className="container" >
+
+      
+        <div className="border m-2 p-2     shadow p-3 mb-5 bg-body-tertiary rounded" >
+          <h1>Testing Back End Is Starting V2</h1>
+          
+
+          <form className="row g-3">
+
+            <div className="input-group mb-3">
+              <span className="input-group-text" htmlFor="Name" >Name</span>
+              <input 
+                type="text" 
+                className="form-control" 
+                placeholder="Name" 
+                id="Name"
+                value={nameTest} 
+                onChange={handleChangeNameTest}  
+              />
+              <button 
+                className="btn btn-success" 
+                type="button" 
+                id="button-addon2"
+                onClick={handleTestConnectionBackend} 
+              >Submit</button>
+            </div>
+
+
+            {/* <div  className="col-auto">
+              <label htmlFor="Name" className="form-label">Name</label>
+            </div>
+            <div  className="col-auto">
+              <input 
+                type="text" 
+                className="form-control" 
+                id="Name" 
+                value={nameTest} 
+                onChange={handleChangeNameTest} 
+              />
+            </div>
+            <div className="col-auto">
+              <button 
+                type="button" 
+                onClick={handleTestConnectionBackend} 
+                className="btn btn-primary"
+              >
+                Submit
+              </button>
+            </div> */}
+
+
+          </form>
+          <h2>Local Value Name: {nameTest}</h2>
+          {/* <h1>----</h1> */}
+          {
+            result ? (
+
+              <center>
+              <div 
+                className={`alert ${result === 'Failed to connect to backend' ? 'alert-danger' : 'alert-success'}`}
+                // className="alert alert-secondary"
+              >
+                <h1>Result Connection:</h1>
+                <h3>{result}</h3>
+              </div>
+              </center>
+            )
+            :
+            (
+              <div><center><p>No result</p></center></div>
+            )
+          }
+          
+          
+        </div>
+
       </div>
       <hr/>
 
-      <h1>Cashier Web App</h1>
 
-      <div>
-        <h2>Generate Test QR Code</h2>
-        <label>
+      <div className="container " >
+        <h1>Cashier Web App</h1>
+        
+
+        {/* ------ */}
+        <form className="row g-3 border m-2 p-2     shadow p-3 mb-5 bg-body-tertiary rounded">
+          <h2>Generate Test QR Code</h2>
+          <div className="col-md-4">
+            <label 
+              htmlFor="OrderID" 
+              className="form-label"
+            >Order ID :</label>
+            <input 
+              type="text" 
+              className="form-control" 
+              id="inputEmail4" 
+              value={orderInput.orderId}
+              onChange={(e) => handleInputChange("orderId", e.target.value)}
+            />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">Item Name :</label>
+            <input 
+              type="text" 
+              className="form-control" 
+              value={orderInput.items[0].name}
+              onChange={(e) => handleInputChange("items", [{ ...orderInput.items[0], name: e.target.value }])}
+            />
+          </div>
+          <div className="col-md-4">
+            <label className="form-label">Quantity :</label>
+            <input 
+              type="number" 
+              className="form-control" 
+              value={orderInput.items[0].quantity}
+              onChange={(e) =>handleInputChange("items", [{ ...orderInput.items[0], quantity: e.target.value }])}
+            />
+          </div>
+          <div className="col-md-6">
+            <label className="form-label">Price :</label>
+            <input 
+              type="number" 
+              className="form-control" 
+              value={orderInput.items[0].price}
+              onChange={(e) => handleInputChange("items", [{ ...orderInput.items[0], price: e.target.value }])}
+            />
+          </div>
+          <div className="col-md-6">
+            <label className="form-label">Total :</label>
+            <input 
+              type="number" 
+              className="form-control" 
+              value={orderInput.total}
+              onChange={(e) => handleInputChange("total", e.target.value)}
+            />
+          </div>
+
+
+
+          <div className="col-12">
+            {/* <button type="submit" className="btn btn-primary">Sign in</button> */}
+            <div className="d-grid gap-2 col-6 mx-auto">
+              {/* <button className="btn btn-primary" type="button">Button</button> */}
+              <button className="btn btn-secondary" type="button" onClick={handleGenerateQRCode}>Generate QR Code</button>
+            </div>
+          </div>
+        </form>
+        {/* ------ */}
+      </div>
+      
+      
+
+      <div className="container">
+        
+        {/* <label>
           Order ID:
           <input
             type="text"
@@ -434,25 +580,160 @@ function App() {
             onChange={(e) => handleInputChange("total", e.target.value)}
           />
         </label>
-        <button onClick={handleGenerateQRCode}>Generate QR Code</button>
+        <button onClick={handleGenerateQRCode}>Generate QR Code</button> */}
 
-        {generatedQR && (
-          <div>
-            <h3>Generated QR Code:</h3>
-            <QRCodeCanvas value={generatedQR} />
+
+
+        <div className="row">
+          <div className="col-sm-2"></div>
+          <div className="col-sm-8">
+            {/* -- */}
+            {generatedQR && (
+              <div className="shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+                <center>
+                
+                  <div>
+                    <h3>Generated QR Code:</h3>
+                    <QRCodeCanvas value={generatedQR} />
+                  </div>
+                
+                </center>
+              </div>
+            )}
+            {/* -- */}
           </div>
-        )}
+          <div className="col-sm-2"></div>
+        </div>
+
+
+        {/* <div className="row">
+          <div className="col-4">col-8</div>
+          <div className="col-4">
+            
+          </div>
+          <div className="col-4">col-4</div>
+        </div> */}
+
+
+        
       </div>
 
-      <div>
+      <hr/>
+      <div className="container">
+        <div className="row" >
+          <div className="col-sm-2"></div>
+
+
+        
+          <div className="col-sm-8">
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+            {orderDetails && (
+              
+
+
+
+
+              <div>
+                {typeof orderDetails === "string" ? (
+                  (() => {
+                    const parsedDetails = JSON.parse(orderDetails); // Parse the string to an object
+                    return (
+                      <div>
+                        <div className="card text-center">
+                          <div className="card-header">
+                            <h4>Order Details</h4>
+                          </div>
+                          <div className="card-body">
+                            {parsedDetails.items && Array.isArray(parsedDetails.items) ? (
+                              <ul>
+                                {parsedDetails.items.map((item, index) => (
+                                  <li key={index}>
+                                    <p><strong>Order ID:</strong> {parsedDetails.orderId}</p>
+                                    <p><strong>Name:</strong> {item.name}</p>
+                                    <p><strong>Quantity:</strong> {item.quantity}</p>
+                                    <p><strong>Price:</strong> {item.price}</p>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p>No items found in the order.</p>
+                            )}
+                          </div>
+                          <div className="card-footer text-body-secondary">
+                            <p><strong>Total:</strong> {parsedDetails.total}</p>
+                          </div>
+                        </div>
+
+
+
+                        {/* <p><strong>Order ID:</strong> {parsedDetails.orderId}</p>
+                        {parsedDetails.items && Array.isArray(parsedDetails.items) ? (
+                          <ul>
+                            {parsedDetails.items.map((item, index) => (
+                              <li key={index}>
+                                <p><strong>Name:</strong> {item.name}</p>
+                                <p><strong>Quantity:</strong> {item.quantity}</p>
+                                <p><strong>Price:</strong> {item.price}</p>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p>No items found in the order.</p>
+                        )}
+                        <p><strong>Total:</strong> {parsedDetails.total}</p> */}
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <p>Invalid order details format.</p>
+                )}
+              </div>
+            )}
+          </div>
+        
+          <div className="col-sm-2"></div>
+        </div>
+      </div>
+      <hr/>
+
+      <div className="container mb-5">
+        <div className="row">
+          <div className="col-12">
+            <div className="d-grid gap-2 col-6 mx-auto">
+              <button 
+                className="btn btn-success" 
+                type="button" 
+                onClick={handleStartScan} 
+                disabled={scanning}
+              >{scanning ? "Scanning..." : "Start QR Scan"}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      {/* <div>
         <button onClick={handleStartScan} disabled={scanning}>
           {scanning ? "Scanning..." : "Start QR Scan (Click Icon)"}
         </button>
-      </div>
+      </div> */}
 
-      {orderDetails && (
+      {/* {orderDetails && (
         <div>
-          <h2>Order Details</h2>
+          <h2>Order Details V2</h2>
           <p><strong>Order ID:</strong> {orderDetails.orderId}</p>
           <ul>
             {orderDetails.items.map((item, index) => (
@@ -462,8 +743,68 @@ function App() {
             ))}
           </ul>
           <p><strong>Total:</strong> {orderDetails.total}</p>
+          <br/>
+          <h2>Order Details</h2>
+          <p><strong>Scanned QR Code Data:</strong> {orderDetails}</p>
         </div>
-      )}
+      )} */}
+
+      {/* {orderDetails && (
+        <div>
+          <h2>Order Details V2</h2>
+          <p><strong>Order ID:</strong> {orderDetails.orderId}</p>
+          {orderDetails.items && Array.isArray(orderDetails.items) ? (
+            <ul>
+              {orderDetails.items.map((item, index) => (
+                <li key={index}>
+                  {item.name} x{item.quantity} - {item.price}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No items found in the order.</p>
+          )}
+          <p><strong>Total:</strong> {orderDetails.total}</p>
+          <br />
+          <h2>Scanned QR Code Dataa</h2>
+          <p><strong>Raw Data:</strong> {JSON.stringify(orderDetails)}</p>
+        </div>
+      )} */}
+
+
+      {/* {orderDetails && (
+        <div>
+          <h2>Order Details</h2>
+          {typeof orderDetails === "string" ? (
+            (() => {
+              const parsedDetails = JSON.parse(orderDetails); // Parse the string to an object
+              return (
+                <div>
+                  <p><strong>Order ID:</strong> {parsedDetails.orderId}</p>
+                  {parsedDetails.items && Array.isArray(parsedDetails.items) ? (
+                    <ul>
+                      {parsedDetails.items.map((item, index) => (
+                        <li key={index}>
+                          <p><strong>Name:</strong> {item.name}</p>
+                          <p><strong>Quantity:</strong> {item.quantity}</p>
+                          <p><strong>Price:</strong> {item.price}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No items found in the order.</p>
+                  )}
+                  <p><strong>Total:</strong> {parsedDetails.total}</p>
+                </div>
+              );
+            })()
+          ) : (
+            <p>Invalid order details format.</p>
+          )}
+        </div>
+      )} */}
+
+
 
       <div id="qr-reader" style={{ width: "100%" }}></div>
     </div>
