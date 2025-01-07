@@ -22,12 +22,12 @@ function App() {
 
   const [nameValid, setNameValid] = useState(null);
   
-  // const apiUrl = 'https://test-scanqrcode-backend.onrender.com';
-  // const socket = io("https://test-scanqrcode-backend.onrender.com");
+  const apiUrl = 'https://test-scanqrcode-backend.onrender.com';
+  const socket = io("https://test-scanqrcode-backend.onrender.com");
 
 
-  const apiUrl = 'http://localhost:5000';
-  const socket = io("http://localhost:5000");
+  // const apiUrl = 'http://localhost:5000';
+  // const socket = io("http://localhost:5000");
 
   // S_UPDATE_V2
   useEffect(() => {
